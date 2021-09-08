@@ -40,7 +40,9 @@ function getConfig(
 
 	if (store === 'memcache') {
 		const Memcached = require('memcached');
-		config.storeClient = new Memcached(env.RATE_LIMITER_MEMCACHE, getConfigFromEnv('RATE_LIMITER_MEMCACHE_'));
+		config.storeClient = Array.isArray(env.RATE_LIMITER_MEMCACHE)
+			? new Memcached(...env.RATE_LIMITER_MEMCACHE, getConfigFromEnv('RATE_LIMITER_MEMCACHE_'))
+			: new Memcached(env.RATE_LIMITER_MEMCACHE, getConfigFromEnv('RATE_LIMITER_MEMCACHE_'));
 	}
 
 	delete config.enabled;
